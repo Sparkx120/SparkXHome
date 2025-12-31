@@ -7,6 +7,16 @@ if [[ "$SPARKX_HOME_RUNTIME" == "setup" ]]; then
     set -eo pipefail
 fi
 
+sparkx-install-os-detect() {
+    if hash apt 2>/dev/null; then
+        echo debian
+    elif hash pacman 2>/dev/null; then
+        echo arch
+    else
+        echo unknown
+    fi
+}
+
 sparkx-install-get-packages() {
     # Usage get-packages <system> <group>
     local system=$1
@@ -44,16 +54,6 @@ sparkx-install-core-debian() {
     sudo apt install -y "${SPARKX_INSTALL_PACKAGES[@]}"
 }
 
-
-sparkx-install-core() {
-    echo "Installing core SparkXHome environment."
-
-    if hash apt 2>/dev/null; then
-        sparkx-install-core-debian
-    elif hash pacman 2>/dev/null; then
-        sparkx-install-core-arch
-    fi
-}
 
 sparkx-install-sparkx-conf-default() {
     if [[ ! -f $XDG_CONFIG_HOME/SparkXHome/config ]]; then
@@ -129,12 +129,32 @@ sparkx-install-link-local() {
 
 sparkx-install-main() {
     echo "Welcome to the SparkXHome Environment Installation Script ✨"
-    echo "Press any key to continue..."
+    
+    local os=$(sparkx-install-os-detect)
+    if [[ "$os" == "unknown" ]]; then
+        echo "Unsupported Operating System 😱"
+        exit 1
+    fi
 
-    read -s -n 1
+    echo "$os detected! 🎉"
+    
+    local available_groups=`ls -p packages/$os | grep -v /`
+
+    echo ""
+    echo "The following package groups are available for installation:"
+    for g in $available_groups; do echo $g; done
+
+    echo ""
+    echo "Please specify which groups you would like to install by listed them with spaces:"
+    
+    read group_selection
 
     echo "Installing SparkXHome Environment ✨"
-    sparkx-install-core
+    if [[ "$os" == "arch" ]]; then
+        sparkx-install-core-arch $group_selection
+    elif [[ "$os" == "debian" ]]; then
+        sparkx-install-core-debian $group_selection
+    fi
     sparkx-install-sparkx-conf-default
     sparkx-install-link-home
     sparkx-install-link-config
