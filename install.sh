@@ -107,7 +107,6 @@ sparkx-install-link-home() {
 
 sparkx-install-link-config() {
     echo "Setup config directory"
-    mkdir -p $SPARKX_HOME_CLONE_DIR/home/.config
     cd $SPARKX_HOME_CLONE_DIR/home/.config
     mkdir -p ~/.config/configbackup
     shopt -s dotglob
@@ -130,12 +129,13 @@ sparkx-install-link-local() {
     echo "Setup .local"
 
     mkdir -p ~/.local/bin
+    mkdir -p $XDG_DATA_HOME
 
-    if [[ -h ~/.local/share/SparkXHome ]]; then
+    if [[ -h $XDG_DATA_HOME/SparkXHome ]]; then
         echo ".local updating old link..."
-        rm ~/.local/share/SparkXHome
+        rm $XDG_DATA_HOME/SparkXHome
     else
-        ln -s $SPARKX_HOME_CLONE_DIR/home/.local/share/SparkXHome ~/.local/share/SparkXHome
+        ln -s $SPARKX_HOME_CLONE_DIR/home/.local/share/SparkXHome $XDG_DATA_HOME/SparkXHome
     fi
 }
 
