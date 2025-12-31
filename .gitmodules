@@ -10,3 +10,39 @@
 [submodule "home/.tmux/plugins/tpm"]
 	path = home/.tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm.git
+[submodule "home/.vim/bundle/ale"]
+	path = home/.vim/bundle/ale
+	url = https://github.com/dense-analysis/ale.git
+[submodule "home/.vim/bundle/nerdtree"]
+	path = home/.vim/bundle/nerdtree
+	url = https://github.com/preservim/nerdtree.git
+[submodule "home/.vim/bundle/rust.vim"]
+	path = home/.vim/bundle/rust.vim
+	url = https://github.com/rust-lang/rust.vim.git
+[submodule "home/.vim/pack/plugins/start/tabular"]
+	path = home/.vim/pack/plugins/start/tabular
+	url = https://github.com/godlygeek/tabular.git
+[submodule "home/.vim/pack/plugins/start/vim-airline"]
+	path = home/.vim/pack/plugins/start/vim-airline
+	url = https://github.com/vim-airline/vim-airline.git
+[submodule "home/.vim/pack/plugins/start/nerdtree"]
+	path = home/.vim/pack/plugins/start/nerdtree
+	url = https://github.com/preservim/nerdtree.git
+[submodule "home/.vim/pack/plugins/start/rust.vim"]
+	path = home/.vim/pack/plugins/start/rust.vim
+	url = https://github.com/rust-lang/rust.vim.git
+[submodule "home/.vim/pack/plugins/start/ale"]
+	path = home/.vim/pack/plugins/start/ale
+	url = https://github.com/dense-analysis/ale.git
+[submodule "home/.vim/pack/plugins/start/vim-airline-themes"]
+	path = home/.vim/pack/plugins/start/vim-airline-themes
+	url = https://github.com/vim-airline/vim-airline-themes.git
+[submodule "home/.vim/pack/plugins/start/vim-fugitive"]
+	path = home/.vim/pack/plugins/start/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+[submodule "home/.vim/pack/plugins/start/vim-ollama"]
+	path = home/.vim/pack/plugins/start/vim-ollama
+	url = https://github.com/gergap/vim-ollama.git
+[submodule "home/.vim/pack/plugins/start/vimwiki"]
+	path = home/.vim/pack/plugins/start/vimwiki
+	url = https://github.com/vimwiki/vimwiki.git

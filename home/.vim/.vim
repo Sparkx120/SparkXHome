@@ -1,0 +1,1 @@
+/home/hotellnx115/jwake/homestruct/hotel/.vim
