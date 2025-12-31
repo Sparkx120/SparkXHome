@@ -83,3 +83,4 @@ syntax on
 
 " Reenable filetype
 filetype on
+filetype plugin on
