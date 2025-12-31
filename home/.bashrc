@@ -23,11 +23,6 @@ if [ -f $XDG_CONFIG_HOME/sparkxhome/config ]; then
     source $XDG_CONFIG_HOME/sparkxhome/config
 fi
 
-# Load install logic if SPARKX_HOME_CLONE_DIR is set
-if [ -n "$SPARKX_HOME_CLONE_DIR" ]; then
-    source $SPARKX_HOME_CLONE_DIR/install.sh
-fi
-
 # Setup PATH
 # export PATH=~/miniconda3/bin:$PATH
 export PATH=~/.local/bin:$PATH

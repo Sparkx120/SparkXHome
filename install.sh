@@ -4,7 +4,7 @@
 SPARKX_HOME_CLONE_DIR=${SPARKX_HOME_CLONE_DIR:-`pwd`}
 SPARKX_HOME_RUNTIME=${SPARKX_HOME_RUNTIME:-setup}
 if [[ "$SPARKX_HOME_RUNTIME" == "setup" ]]; then
-    set -e
+    set -eo pipefail
 fi
 
 sparkx-install-get-packages() {
@@ -74,7 +74,8 @@ sparkx-install-link-home() {
         if [[ "$f" == ".config" || "$f" == ".local" ]]; then
             :
         elif [[ -h ~/$f ]]; then
-            echo "$f already linked..."
+            rm ~/$f
+            echo "$f removed old link..."
         else
             echo "Linking $f"
             if [[ -f ~/$f || -d ~/$f ]]; then
@@ -101,7 +102,8 @@ sparkx-install-link-config() {
     shopt -s dotglob
     for f in *; do
         if [[ -h ~/.config/$f ]]; then
-            echo "$f already linked..."
+            rm ~/$f
+            echo "$f removed old link..."
         else
             if [[ -f ~/.config/$f || -d ~/.config/$f ]]; then
                 mv ~/.config/$f ~/.config/configbackup
@@ -117,26 +119,15 @@ sparkx-install-link-config() {
 sparkx-install-local() {
     echo "Setup .local"
 
-    local link=false
-
-    while [ "$#" -gt 0 ]; do
-        case $1 in
-            link) link=true ;;
-        esac
-        shift
-    done
-
     mkdir -p ~/.local/bin
-    mkdir -p ~/.local/share/sparkxhome/scripts/plugins
+    mkdir -p ~/.local/share/sparkxhome/plugins/
+    mkdir -p ~/.local/share/sparkxhome/scripts/
 
-    if [[ "$link" == "false" ]]; then
-        cp -R $SPARKX_HOME_CLONE_DIR/home/.local/share/sparkxhome/scripts/core/ ~/.local/share/sparkxhome/scripts/
+    if [[ -h $SPARKX_HOME_CLONE_DIR/home/.local/share/sparkxhome/scripts/core ]]; then
+        rm $SPARKX_HOME_CLONE_DIR/home/.local/share/sparkxhome/scripts/core
+        echo ".local removed old link..."
     else
-        if [[ -h $SPARKX_HOME_CLONE_DIR/home/.local/share/sparkxhome/scripts/core ]]; then
-            echo ".local already linked..."
-        else
-            ln -s $SPARKX_HOME_CLONE_DIR/home/.local/share/sparkxhome/scripts/core ~/.local/share/sparkxhome/scripts/core
-        fi
+        ln -s $SPARKX_HOME_CLONE_DIR/home/.local/share/sparkxhome/scripts/core ~/.local/share/sparkxhome/scripts/core
     fi
 }
 
