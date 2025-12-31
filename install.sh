@@ -34,6 +34,8 @@ sparkx-install-get-packages() {
         shift
     done
     
+    declare -a SPARKX_INSTALL_PACKAGES=() 
+
     for group in ${groups[@]}; do
         < $SPARKX_HOME_CLONE_DIR/packages/$system/$group mapfile -t -O ${#SPARKX_INSTALL_PACKAGES[@]} SPARKX_INSTALL_PACKAGES
     done
