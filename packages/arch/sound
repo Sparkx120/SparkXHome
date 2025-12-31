@@ -1,0 +1,7 @@
+alsa-utils
+openal
+pipewire
+pipewire-alsa
+pipewire-pulse
+playerctl
+pulsemixer
