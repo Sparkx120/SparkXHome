@@ -10,7 +10,9 @@ export XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 export XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 
 # Setup SparkX Script Paths
-export SPARKX_SCRIPT_BASE=$XDG_DATA_HOME/sparkxhome/scripts
+export SPARKX_HOME_BASE=$XDG_DATA_HOME/sparkxhome
+export SPARKX_HOME_PLUGINS=$SPARKX_HOME_BASE/plugins
+export SPARKX_HOME_SCRIPTS=$SPARKX_HOME_BASE/scripts
 
 # Load SparkX Conf if it exists
 mkdir -p $XDG_CONFIG_HOME/sparkxhome
@@ -37,7 +39,7 @@ export VISUAL=$EDITOR
 export BROWSER=firefox
 export GPG_TTY=$(tty)
 
-source $SPARKX_SCRIPT_BASE/core/.init.sh
+source $SPARKX_HOME_SCRIPTS/.init.sh
 
 # Local PS1
 GIT_STATUS="\$(if git status > /dev/null 2>&1; then echo \"\342\224\200[\[\[\033[0;33m\]\$(git branch --show-current) \$(git rev-parse --short HEAD)\$(git diff --shortstat | awk '{print \" \" \$1 \"f\" \$4 \"i\" \$6 \"d\"}')\[\033[0;37m\]]\"; fi)"

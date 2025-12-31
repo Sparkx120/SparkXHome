@@ -72,18 +72,17 @@ sparkx-install-link-home() {
     shopt -s dotglob
     for f in *; do
         if [[ "$f" == ".config" || "$f" == ".local" ]]; then
-            :
+            break
         elif [[ -h ~/$f ]]; then
+            echo "$f updating old link..."
             rm ~/$f
-            echo "$f removed old link..."
-        else
-            echo "Linking $f"
-            if [[ -f ~/$f || -d ~/$f ]]; then
-                echo "Found existing version of $f, backing up"
-                mv ~/$f ~/homebackup
-            fi
-            ln -s `pwd`/$f ~/$f
         fi
+        echo "Linking $f"
+        if [[ -f ~/$f || -d ~/$f ]]; then
+            echo "Found existing version of $f, backing up"
+            mv ~/$f ~/homebackup
+        fi
+        ln -s `pwd`/$f ~/$f
     done
     shopt -u dotglob
 
@@ -102,32 +101,29 @@ sparkx-install-link-config() {
     shopt -s dotglob
     for f in *; do
         if [[ -h ~/.config/$f ]]; then
-            rm ~/$f
-            echo "$f removed old link..."
-        else
-            if [[ -f ~/.config/$f || -d ~/.config/$f ]]; then
-                mv ~/.config/$f ~/.config/configbackup
-                echo "Found existing version of $f, backing up"
-            fi
-            ln -s `pwd`/$f ~/.config/$f
+            echo "$f updating old link..."
+            rm ~/.config/$f
         fi
+        if [[ -f ~/.config/$f || -d ~/.config/$f ]]; then
+            mv ~/.config/$f ~/.config/configbackup
+            echo "Found existing version of $f, backing up"
+        fi
+        ln -s `pwd`/$f ~/.config/$f
     done
     shopt -u dotglob
     cd -
 }
 
-sparkx-install-local() {
+sparkx-install-link-local() {
     echo "Setup .local"
 
     mkdir -p ~/.local/bin
-    mkdir -p ~/.local/share/sparkxhome/plugins/
-    mkdir -p ~/.local/share/sparkxhome/scripts/
 
-    if [[ -h $SPARKX_HOME_CLONE_DIR/home/.local/share/sparkxhome/scripts/core ]]; then
-        rm $SPARKX_HOME_CLONE_DIR/home/.local/share/sparkxhome/scripts/core
-        echo ".local removed old link..."
+    if [[ -h $SPARKX_HOME_CLONE_DIR/home/.local/share/sparkxhome/scripts ]]; then
+        rm $SPARKX_HOME_CLONE_DIR/home/.local/share/sparkxhome/scripts
+        echo ".local updating old link..."
     else
-        ln -s $SPARKX_HOME_CLONE_DIR/home/.local/share/sparkxhome/scripts/core ~/.local/share/sparkxhome/scripts/core
+        ln -s $SPARKX_HOME_CLONE_DIR/home/.local/share/sparkxhome ~/.local/share/sparkxhome
     fi
 }
 
@@ -142,7 +138,7 @@ sparkx-install-main() {
     sparkx-install-sparkx-conf-default
     sparkx-install-link-home
     sparkx-install-link-config
-    sparkx-install-local link
+    sparkx-install-link-local
     echo "Finished installing environment 🥳"
 }
 
