@@ -10,7 +10,7 @@ XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 SPARKX_HOME_CLONE_DIR=${SPARKX_HOME_CLONE_DIR:-`pwd`}
 SPARKX_HOME_RUNTIME=${SPARKX_HOME_RUNTIME:-setup}
 if [[ "$SPARKX_HOME_RUNTIME" == "setup" ]]; then
-    set -eo pipefail
+    set -euo pipefail
 fi
 
 sparkx-install-os-detect() {
@@ -65,6 +65,7 @@ sparkx-install-core-debian() {
 
 
 sparkx-install-sparkx-conf-default() {
+    mkdir -p $XDG_CONFIG_HOME/SparkXHome/
     if [[ ! -f $XDG_CONFIG_HOME/SparkXHome/config ]]; then
         cp $SPARKX_HOME_CLONE_DIR/default.config $XDG_CONFIG_HOME/SparkXHome/config
         echo "SPARKX_HOME_CLONE_DIR=$SPARKX_HOME_CLONE_DIR" >> $XDG_CONFIG_HOME/SparkXHome/config
