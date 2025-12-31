@@ -13,6 +13,8 @@ if [[ "$SPARKX_HOME_RUNTIME" == "setup" ]]; then
     set -euo pipefail
 fi
 
+declare -a SPARKX_INSTALL_PACKAGES=() 
+
 sparkx-install-os-detect() {
     if hash apt 2>/dev/null; then
         echo debian
@@ -32,9 +34,7 @@ sparkx-install-get-packages() {
     while [ "$#" -gt 0 ]; do
         groups+=($1)
         shift
-    done
-    
-    declare -a SPARKX_INSTALL_PACKAGES=() 
+    done    
 
     for group in ${groups[@]}; do
         < $SPARKX_HOME_CLONE_DIR/packages/$system/$group mapfile -t -O ${#SPARKX_INSTALL_PACKAGES[@]} SPARKX_INSTALL_PACKAGES
