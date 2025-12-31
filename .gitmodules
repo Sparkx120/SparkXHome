@@ -1,0 +1,12 @@
+[submodule "home/.tmux/tmux-powerline"]
+	path = home/.tmux/tmux-powerline
+	url = https://github.com/Sparkx120/tmux-powerline.git
+[submodule "home/.tmux/plugins/tmux-sensible"]
+	path = home/.tmux/plugins/tmux-sensible
+	url = https://github.com/tmux-plugins/tmux-sensible.git
+[submodule "home/.tmux/plugins/tmux-themepack"]
+	path = home/.tmux/plugins/tmux-themepack
+	url = https://github.com/jimeh/tmux-themepack.git
+[submodule "home/.tmux/plugins/tpm"]
+	path = home/.tmux/plugins/tpm
+	url = https://github.com/tmux-plugins/tpm.git
