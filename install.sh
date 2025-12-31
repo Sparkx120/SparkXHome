@@ -72,7 +72,7 @@ sparkx-install-link-home() {
     shopt -s dotglob
     for f in *; do
         if [[ "$f" == ".config" || "$f" == ".local" ]]; then
-            break
+            continue
         elif [[ -h ~/$f ]]; then
             echo "$f updating old link..."
             rm ~/$f

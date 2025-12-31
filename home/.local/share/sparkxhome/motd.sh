@@ -18,7 +18,7 @@ _max_length() {
 }
 
 draw_ascii_art() {
-    local MOTD_ART=${SPARKX_HOME_MOTD_ART:-$XDG_DATA_HOME/sparkxhome/hostart.txt}
+    local MOTD_ART=${SPARKX_HOME_MOTD_ART:-$XDG_DATA_HOME/SparkXHome/hostart.txt}
     local MOTD_USE_HOST_ART=${SPARKX_HOME_MOTD_USE_HOST_ART:-false}
     local MOTD_NAME=${SPARKX_HOME_MOTD_NAME:-`whoami`}
     local MOTD_HOST_FONT=${SPARKX_HOME_MOTD_HOST_FONT:-roman}
@@ -34,7 +34,7 @@ draw_ascii_art() {
 draw_original_art() {
     local TERM_WIDTH=$1
     local MOTD_WIDTH=$2
-    local MOTD_ART=${SPARKX_HOME_MOTD_ART:-$XDG_DATA_HOME/sparkxhome/hostart.txt}
+    local MOTD_ART=${SPARKX_HOME_MOTD_ART:-$XDG_DATA_HOME/SparkXHome/hostart.txt}
     local MOTD_USE_HOST_ART=${SPARKX_HOME_MOTD_USE_HOST_ART:-false}
     local MOTD_INDENT=`expr $TERM_WIDTH - $MOTD_WIDTH`
     local MOTD_INDENT=`expr $MOTD_INDENT / 2`
@@ -68,7 +68,7 @@ draw_custom_art() {
     local TERM_WIDTH=$1
     local MOTD_WIDTH=$2
     local ART_FILE=$3
-    local MOTD_ART=${SPARKX_HOME_MOTD_ART:-$XDG_DATA_HOME/sparkxhome/hostart.txt}
+    local MOTD_ART=${SPARKX_HOME_MOTD_ART:-$XDG_DATA_HOME/SparkXHome/hostart.txt}
     local MOTD_USE_HOST_ART=${SPARKX_HOME_MOTD_USE_HOST_ART:-false}
     local IMG_WIDTH=`expr $TERM_WIDTH \* 3 / 4 `
     local ART="$SPARKX_HOME_CLONE_DIR/$ART_FILE"
@@ -139,10 +139,10 @@ draw_login() {
     if [ -f ~/.sparkxconf ]; then # Deprecated (migrate)
         mv ~/.sparkxconf ~/.sparkx.conf
     elif [ -f ~/.sparkx.conf ]; then
-        mv ~/.sparkx.conf $XDG_CONFIG_HOME/sparkxhome/config
+        mv ~/.sparkx.conf $XDG_CONFIG_HOME/SparkXHome/config
     fi
-    if [ -f $XDG_CONFIG_HOME/sparkxhome/config ]; then
-        source $XDG_CONFIG_HOME/sparkxhome/config
+    if [ -f $XDG_CONFIG_HOME/SparkXHome/config ]; then
+        source $XDG_CONFIG_HOME/SparkXHome/config
     fi
 
     # Set vars

@@ -10,19 +10,20 @@ export XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 export XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 
 # Setup SparkX Script Paths
-export SPARKX_HOME_BASE=$XDG_DATA_HOME/sparkxhome
-export SPARKX_HOME_PLUGINS=$XDG_CONFIG_HOME/sparkxhome/plugins
+export SPARKX_HOME_BASE=$XDG_DATA_HOME/SparkXHome
+export SPARKX_HOME_PLUGINS=$XDG_CONFIG_HOME/SparkXHome/plugins
 export SPARKX_HOME_SCRIPTS=$SPARKX_HOME_BASE/scripts
 
 # Load SparkX Conf if it exists
-mkdir -p $XDG_CONFIG_HOME/sparkxhome
+mkdir -p $XDG_CONFIG_HOME/SparkXHome
 if [ -f ~/.sparkxconf ]; then # Deprecated (migrate)
     mv ~/.sparkxconf ~/.sparkx.conf
-elif [ -f ~/.sparkx.conf ]; then
-    mv ~/.sparkx.conf $XDG_CONFIG_HOME/sparkxhome/config
 fi
-if [ -f $XDG_CONFIG_HOME/sparkxhome/config ]; then
-    source $XDG_CONFIG_HOME/sparkxhome/config
+if [ -f ~/.sparkx.conf ]; then
+    mv ~/.sparkx.conf $XDG_CONFIG_HOME/SparkXHome/config
+fi
+if [ -f $XDG_CONFIG_HOME/SparkXHome/config ]; then
+    source $XDG_CONFIG_HOME/SparkXHome/config
 fi
 
 # Setup PATH
