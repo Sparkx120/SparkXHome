@@ -23,6 +23,6 @@ fi
 cd ~
 mkdir -p projects
 cd projects
-git clone https://github.com/Sparkx120/sparkxhome.git
-cd sparkxhome
+git clone https://github.com/Sparkx120/SparkXHome.git
+cd SparkXHome
 ./install.sh

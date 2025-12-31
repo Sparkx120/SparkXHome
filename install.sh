@@ -131,7 +131,7 @@ sparkx-install-main() {
     echo "Welcome to the SparkXHome Environment Installation Script ✨"
     echo "Press any key to continue..."
 
-    read -n -s 1
+    read -s -n 1
 
     echo "Installing SparkXHome Environment ✨"
     sparkx-install-core
