@@ -56,12 +56,12 @@ sparkx-install-core() {
 }
 
 sparkx-install-sparkx-conf-default() {
-    if [[ ! -f $XDG_CONFIG_HOME/sparkxhome/config ]]; then
-        cp $SPARKX_HOME_CLONE_DIR/default.config $XDG_CONFIG_HOME/sparkxhome/config
-        echo "SPARKX_HOME_CLONE_DIR=$SPARKX_HOME_CLONE_DIR" >> $XDG_CONFIG_HOME/sparkxhome/config
-        echo "Installed default $XDG_CONFIG_HOME/sparkxhome/config"
+    if [[ ! -f $XDG_CONFIG_HOME/SparkXHome/config ]]; then
+        cp $SPARKX_HOME_CLONE_DIR/default.config $XDG_CONFIG_HOME/SparkXHome/config
+        echo "SPARKX_HOME_CLONE_DIR=$SPARKX_HOME_CLONE_DIR" >> $XDG_CONFIG_HOME/SparkXHome/config
+        echo "Installed default $XDG_CONFIG_HOME/SparkXHome/config"
     else
-        echo "$XDG_CONFIG_HOME/sparkxhome/config already exists, skipping default load (please check for any new vars)"
+        echo "$XDG_CONFIG_HOME/SparkXHome/config already exists, skipping default load (please check for any new vars)"
     fi
 }
 
@@ -119,11 +119,11 @@ sparkx-install-link-local() {
 
     mkdir -p ~/.local/bin
 
-    if [[ -h $SPARKX_HOME_CLONE_DIR/home/.local/share/sparkxhome/scripts ]]; then
-        rm $SPARKX_HOME_CLONE_DIR/home/.local/share/sparkxhome/scripts
+    if [[ -h ~/.local/share/SparkXHome ]]; then
         echo ".local updating old link..."
+        rm ~/.local/share/SparkXHome
     else
-        ln -s $SPARKX_HOME_CLONE_DIR/home/.local/share/sparkxhome ~/.local/share/sparkxhome
+        ln -s $SPARKX_HOME_CLONE_DIR/home/.local/share/SparkXHome ~/.local/share/SparkXHome
     fi
 }
 
