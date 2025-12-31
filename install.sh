@@ -29,7 +29,7 @@ sparkx-install-get-packages() {
     done
     
     for group in ${groups[@]}; do
-        < $SPARKX_HOME_CLONE_DIR/packages/$system/$group mapfile -O ${#SPARKX_INSTALL_PACKAGES[@]} SPARKX_INSTALL_PACKAGES
+        < $SPARKX_HOME_CLONE_DIR/packages/$system/$group mapfile -t -O ${#SPARKX_INSTALL_PACKAGES[@]} SPARKX_INSTALL_PACKAGES
     done
 }
 
@@ -38,8 +38,9 @@ sparkx-install-core-arch() {
     echo "sudo will be required"
 
     sparkx-install-get-packages arch $@
-
-    cmd=(sudo pacman -Sy --noconfirm "${SPARKX_INSTALL_PACKAGES[@]}")
+    
+    sudo pacman -Sy
+    cmd=(sudo pacman -S --noconfirm "${SPARKX_INSTALL_PACKAGES[@]}")
     echo "${cmd[@]}"
     "${cmd[@]}"
 }
