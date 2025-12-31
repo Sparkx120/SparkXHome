@@ -11,7 +11,7 @@ export XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 
 # Setup SparkX Script Paths
 export SPARKX_HOME_BASE=$XDG_DATA_HOME/sparkxhome
-export SPARKX_HOME_PLUGINS=$SPARKX_HOME_BASE/plugins
+export SPARKX_HOME_PLUGINS=$XDG_CONFIG_HOME/sparkxhome/plugins
 export SPARKX_HOME_SCRIPTS=$SPARKX_HOME_BASE/scripts
 
 # Load SparkX Conf if it exists
