@@ -1,0 +1,1 @@
+SWAYCONF=~/.config/sway/config
