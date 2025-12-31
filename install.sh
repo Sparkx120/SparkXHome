@@ -28,8 +28,6 @@ sparkx-install-get-packages() {
         shift
     done
     
-    SPARKX_INSTALL_PACKAGES=${SPARKX_INSTALL_PACKAGES:-()}
-
     for group in ${groups[@]}; do
         < $SPARKX_HOME_CLONE_DIR/packages/$system/$group mapfile -O ${#SPARKX_INSTALL_PACKAGES[@]} SPARKX_INSTALL_PACKAGES
     done
@@ -41,7 +39,9 @@ sparkx-install-core-arch() {
 
     sparkx-install-get-packages arch $@
 
-    sudo pacman -Sy --needed --noconfirm "${SPARKX_INSTALL_PACKAGES[@]}"
+    cmd=(sudo pacman -Sy --noconfirm "${SPARKX_INSTALL_PACKAGES[@]}")
+    echo "${cmd[@]}"
+    "${cmd[@]}"
 }
 
 sparkx-install-core-debian() {
@@ -51,7 +51,9 @@ sparkx-install-core-debian() {
     sparkx-install-get-packages debian $@
 
     sudo apt update
-    sudo apt install -y "${SPARKX_INSTALL_PACKAGES[@]}"
+    cmd=(sudo apt install -y "${SPARKX_INSTALL_PACKAGES[@]}")
+    echo "${cmd[@]}"
+    "${cmd[@]}"
 }
 
 
@@ -128,6 +130,7 @@ sparkx-install-link-local() {
 }
 
 sparkx-install-main() {
+    clear
     echo "Welcome to the SparkXHome Environment Installation Script ✨"
     
     local os=$(sparkx-install-os-detect)
@@ -145,7 +148,7 @@ sparkx-install-main() {
     for g in $available_groups; do echo $g; done
 
     echo ""
-    echo "Please specify which groups you would like to install by listed them with spaces:"
+    echo "Please specify which groups you would like to install by listed them with spaces (you must include base):"
     
     read group_selection
 
