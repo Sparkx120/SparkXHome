@@ -197,7 +197,11 @@ sparkx-install-main() {
     sparkx-install-link-home
     sparkx-install-link-config
     sparkx-install-link-local
-    printf "\n\n🎉 Finished installing environment 🎉"
+    printf "\n\n🎉 Finished installing environment 🎉\n\nPress any key to reboot or ctrl-c to exit"
+    
+    read -s -n 1
+
+    sudo systemctl reboot 
 }
 
 if [[ $BASH_SOURCE != $0 ]]; then
