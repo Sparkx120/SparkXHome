@@ -1,6 +1,9 @@
 #!/bin/bash
 # Installs SparkX120 Symlinked Environment
 
+# Constants
+declare -rA OS_NAME_MAP=(["arch"]="Arch Linux", ["debian"]="Debian Linux")
+
 # Setup XDG Base Directory Paths
 XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
 XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
@@ -25,14 +28,20 @@ sparkx-install-os-detect() {
     fi
 }
 
+sparkx-install-get-groups() {
+    ls -1 $SPARKX_HOME_CLONE_DIR/packages/$(sparkx-install-os-detect) | xargs -L 1 basename | cut -f 1 -d '.' | uniq | tr '\n' ' '
+}
+
 sparkx-install-get-packages() {
     # Usage get-packages <system> <group>
     local system=$1
     shift
     local groups=()
 
+    printf "\n⚙️  Installing packages defined in groups...\n"
+    
     while [ "$#" -gt 0 ]; do
-        groups+=($1)
+        groups+=(${1}.group.packages)
         shift
     done    
 
@@ -42,8 +51,8 @@ sparkx-install-get-packages() {
 }
 
 sparkx-install-core-arch() {
-    echo "Install common base software on Arch Base"
-    echo "sudo will be required"
+    printf "Installing packages"
+    printf "sudo will be required"
 
     sparkx-install-get-packages arch $@
     
@@ -51,6 +60,12 @@ sparkx-install-core-arch() {
     cmd=(sudo pacman -S --noconfirm "${SPARKX_INSTALL_PACKAGES[@]}")
     echo "${cmd[@]}"
     "${cmd[@]}"
+
+    for post_install_script in $SPARKX_HOME_CLONE_DIR/packages/arch/${@}.group.post; do
+        if [[ -f $post_install_script ]]; then
+            bash $post_install_script
+        fi
+    done
 }
 
 sparkx-install-core-debian() {
@@ -141,28 +156,38 @@ sparkx-install-link-local() {
 
 sparkx-install-main() {
     clear
-    echo "Welcome to the SparkXHome Environment Installation Script ✨"
+    printf "\n✨ Welcome to the SparkXHome Environment Installation Script ✨\n"
     
     local os=$(sparkx-install-os-detect)
     if [[ "$os" == "unknown" ]]; then
-        echo "Unsupported Operating System 😱"
+        printf "😱Unsupported Operating System"
         exit 1
     fi
 
-    echo "$os detected! 🎉"
+    printf "\n💽 ${OS_NAME_MAP[$os]} base system detected\n"
+
+    printf "\nℹ️  The following script will guide you through the setup of the SparkXHome Environment\n"
+    printf "Please note that sudo is required if you wish to install packages\n"
+    printf "Installing packages may cause issues on your computer unless you are doing first time setup\n"
+    printf "This script will stop if any part of the script fails, if that occurs you will need to cleanup manually.\n"
     
-    local available_groups=`ls -p packages/$os | grep -v /`
+    printf "\nThe following package groups are available for installation:\n"
+    for g in $(sparkx-install-get-groups); do echo $g; done
 
-    echo ""
-    echo "The following package groups are available for installation:"
-    for g in $available_groups; do echo $g; done
 
-    echo ""
-    echo "Please specify which groups you would like to install by listed them with spaces (you must include base):"
+    printf "\nPlease specify which groups you would like to install by listing them with spaces (you must include base):\n"
     
     read group_selection
 
-    echo "Installing SparkXHome Environment ✨"
+    if [[ $group_selection != *"base"* ]]; then
+        printf "\nThe base package will be automatically installed as it is required for SparkXHome components to work\n"
+        group_selection="base $group_selection"
+    fi
+    
+    printf "\nThe following packages have been selected:\n${group_selection}\n\nPress any key to begin installation:"
+    read -s -n 1
+
+    printf "\n🚀 Installing SparkXHome Environment!"
     if [[ "$os" == "arch" ]]; then
         sparkx-install-core-arch $group_selection
     elif [[ "$os" == "debian" ]]; then
@@ -172,12 +197,12 @@ sparkx-install-main() {
     sparkx-install-link-home
     sparkx-install-link-config
     sparkx-install-link-local
-    echo "Finished installing environment 🥳"
+    printf "\n\n🎉 Finished installing environment 🎉"
 }
 
 if [[ $BASH_SOURCE != $0 ]]; then
     if [[ "$SPARKX_HOME_RUNTIME" == "setup" ]]; then
-        echo "Welcome to the SparkXHome interactive shell setup!"
+        printf "Welcome to the SparkXHome interactive shell setup!\n"
     fi
 else
     sparkx-install-main
