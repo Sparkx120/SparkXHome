@@ -411,7 +411,7 @@ setup_user() {
 
     arch-chroot /mnt useradd -m ${username}
     # I know I could just use this directly but I have a style I am going for here :3
-    printf "${password}\n${password}" | arch-chroot /mnt passwd ${username} 2&>1 /dev/null
+    printf "${password}\n${password}" | arch-chroot /mnt passwd ${username} > /dev/null 2> /dev/null
     unset password
     
     arch-chroot /mnt usermod --append --groups wheel ${username}
