@@ -358,7 +358,7 @@ setup_boot() {
     # TODO cleanup leftover initramfs-*.img
 
     # Setup EFI Boot
-    arch-chroot /mnt efibootmgr --create --disk ${BOOT_DEV} --part 1 --label "ArchLinux" --loader 'EFI\Linux\ArchLinux-linux.efi' --unicode
+    arch-chroot /mnt efibootmgr --create --disk ${BOOT_DEV} --part 1 --label "ArchLinux" --loader 'EFI\Linux\archLinux-linux.efi' --unicode
 
 }
 
@@ -397,6 +397,8 @@ setup_user() {
     safe_sed_inplace "# \(.*\)wheel ALL=(ALL:ALL) ALL" "\1wheel ALL=(ALL:ALL) ALL" /mnt/etc/sudoers
     
     curl https://sparkx120.com/bulk/sparkxhome_init.sh > /mnt/home/${username}/sparkxhome_init.sh 2> /dev/null
+    arch-chroot /mnt chown /home/${username}/sparkxhome_init.sh ${username}
+    arch-chroot /mnt chmod +x /home/${username}/sparkxhome_init.sh
 }
 
 main() {
