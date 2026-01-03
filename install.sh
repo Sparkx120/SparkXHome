@@ -61,7 +61,8 @@ sparkx-install-core-arch() {
     echo "${cmd[@]}"
     "${cmd[@]}"
 
-    for post_install_script in $SPARKX_HOME_CLONE_DIR/packages/arch/${@}.group.post; do
+    for group in ${@}; do
+        local post_install_script=$SPARKX_HOME_CLONE_DIR/packages/arch/${group}.group.post
         if [[ -f $post_install_script ]]; then
             bash $post_install_script
         fi
