@@ -24,6 +24,8 @@ printf "\n\nSetup an ssh key (Yn): "
 
 read setup_ssh
 
+printf "\n"
+
 if [[ "${setup_ssh}" == "" || "${setup_ssh}" == "y" || "${setup_ssh}" == "Y" ]]; then
     mkdir -p ~/.ssh
     ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519
@@ -40,6 +42,8 @@ cd projects
 printf "\n\nUse ssh to clone repo (Yn): "
 
 read use_ssh
+
+printf "\n"
 
 if [[ "${use_ssh}" == "" || "${use_ssh}" == "y" || "${use_ssh}" == "Y" ]]; then
     git clone --recurse-submodules git@github.com:Sparkx120/SparkXHome.git
