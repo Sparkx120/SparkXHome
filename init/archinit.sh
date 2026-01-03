@@ -4,6 +4,13 @@
 # v0.1.0
 #
 # A very opinionated initialization script for an arch system
+#
+# This script assumes a lot including:
+# - The entire drive you select will be used for just Arch
+# - You only have one OS, namely Arch installed and don't need a bootloader (UKI)
+# - Partitioning and disk layout
+# - Encryption setup
+# - Basic software
 # 
 # Some References:
 # - https://wiki.archlinux.org/title/Installation_guide
@@ -60,6 +67,7 @@ SETUP_HOSTNAME=
 CPU_TYPE=
 GPU_TYPE=
 ROOT_UUID=
+BOOT_UUID=
 BOOT_DEV=
 
 safe_sed_inplace() {
@@ -231,8 +239,9 @@ setup_drive() {
 
     mkfs.fat ${devp}1
     mkfs.btrfs /dev/mapper/cryptroot
-    
-    ROOT_UUID=$(lsblk -dno UUID ${devp}2)
+
+    BOOT_PARTUUID=$(lsblk -dno PARTUUID ${devp}1)
+    ROOT_UUID=$(lsblk -dno UUID ${devp}2)    
 
     mount /dev/mapper/cryptroot /mnt
     btrfs subvolume create /mnt/@
@@ -339,12 +348,12 @@ setup_boot() {
     printf "🥾 Setting up Boot...\n\n"
     
     # Setup mkinitcpio.conf
-    safe_sed_inplace "MODULES=.*$" "MODULES=\(keyboard usbhid xhci_hcd\)" /mnt/etc/mkinitcpio.conf
-    safe_sed_inplace "HOOKS=.*$" "HOOKS=\(base systemd autodetect microcode modconf kms keyboard keymap sd-vconsole block sd-encrypt filesystems fsck\)" /mnt/etc/mkinitcpio.conf
+    sed -i "s|MODULES=.*$|MODULES=\(keyboard usbhid xhci_hcd\)|" /mnt/etc/mkinitcpio.conf
+    sed -i "s|HOOKS=.*$|HOOKS=\(base systemd autodetect microcode modconf kms keyboard keymap sd-vconsole block sd-encrypt filesystems fsck\)|" /mnt/etc/mkinitcpio.conf
 
     # Setup mkinitcpi.d/linux.preset for Unified Kernal Image
-    safe_sed_inplace "default_image" "#default_image" /mnt/etc/mkinitcpio.d/linux.preset
-    safe_sed_inplace "#default_uki" "default_uki" /mnt/etc/mkinitcpio.d/linux.preset   
+    sed -i "s|default_image|#default_image|" /mnt/etc/mkinitcpio.d/linux.preset
+    sed -i "s|#default_uki|default_uki|" /mnt/etc/mkinitcpio.d/linux.preset   
    
     # Setup kernel commandline
     echo "root=/dev/mapper/cryptroot rootfstype=btrfs rootflags=subvol=/@ rw modprobe.blacklist=pcspkr zswap.enabled=0" > /mnt/etc/kernel/cmdline
@@ -359,7 +368,19 @@ setup_boot() {
 
     # Setup EFI Boot
     arch-chroot /mnt efibootmgr --create --disk ${BOOT_DEV} --part 1 --label "ArchLinux" --loader 'EFI\Linux\archLinux-linux.efi' --unicode
+    arch-chroot /mnt efibootmgr -D 
+    
+    #arch-chroot /mnt efibootmgr > boot.txt
+    #local new_entry=$(grep $BOOT_PARTUUID boot.txt | awk '{print $1}' | sed 's|Boot||' | sed 's|\*||')
+    #local existing_boot_order=$(grep BootOrder boot.txt | awk '{print $2}')
 
+    #if [[ "${new_entry}" == "" ]]; then
+    #    printf "🥾 Error Manipulating EFI Boot, please check your efibootmgr state and fix as needed!!!"
+    #    exit 1
+    #fi
+
+    #arch-chroot /mnt efibootmgr -a -b ${new_entry}
+    #arch-chroot /mnt efibootmgr --bootorder ${new_entry},${existing_boot_order}
 }
 
 setup_user() {
@@ -390,14 +411,14 @@ setup_user() {
 
     arch-chroot /mnt useradd -m ${username}
     # I know I could just use this directly but I have a style I am going for here :3
-    printf "${password}\n${password}" | arch-chroot /mnt passwd ${username} > /dev/null
+    printf "${password}\n${password}" | arch-chroot /mnt passwd ${username} 2&>1 /dev/null
     unset password
     
     arch-chroot /mnt usermod --append --groups wheel ${username}
     safe_sed_inplace "# \(.*\)wheel ALL=(ALL:ALL) ALL" "\1wheel ALL=(ALL:ALL) ALL" /mnt/etc/sudoers
     
     curl https://sparkx120.com/bulk/sparkxhome_init.sh > /mnt/home/${username}/sparkxhome_init.sh 2> /dev/null
-    arch-chroot /mnt chown /home/${username}/sparkxhome_init.sh ${username}
+    arch-chroot /mnt chown ${username} /home/${username}/sparkxhome_init.sh
     arch-chroot /mnt chmod +x /home/${username}/sparkxhome_init.sh
 }
 
@@ -418,6 +439,9 @@ main() {
     set_hostname
     set_cpu_type
     set_gpu_type
+    
+    # SSH is open by default, we don't want that
+    systemctl stop sshd
 
     # Mirror Setup
     setup_mirrors
@@ -434,7 +458,7 @@ main() {
     printf "🎉 Setup Complete 🎉"
     printf "\n\nYou may continue working on the archinstall iso or reboot into the system"
     printf "\nA copy of sparkxhome_init.sh has been conveniently left in your home directory to finish setting up"
-    printf "\n\nHave a wonderful day 😄"
+    printf "\n\nHave a wonderful day 😄\n\n"
 }
 
 if [[ $BASH_SOURCE == $0 ]]; then

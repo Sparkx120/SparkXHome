@@ -29,13 +29,23 @@ if [[ "${setup_ssh}" == "" || "${setup_ssh}" == "y" || "${setup_ssh}" == "Y" ]];
     ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519
 
     printf "\n\nYour public key is: "
-    cat ~/.ssh /id_ed25519.pub
+    cat ~/.ssh/id_ed25519.pub
     printf "\nPlease add it to GitHub and anywhere else you wish and then press any key to continue..."
 fi
 
 cd ~
 mkdir -p projects
 cd projects
-git clone --recurse-submodules git@github.com:Sparkx120/SparkXHome.git
+
+printf "\n\nUse ssh to clone repo (Yn): "
+
+read use_ssh
+
+if [[ "${use_ssh}" == "" || "${use_ssh}" == "y" || "${use_ssh}" == "Y" ]]; then
+    git clone --recurse-submodules git@github.com:Sparkx120/SparkXHome.git
+else
+    git clone --recurse-submodules https://github.com/Sparkx120/SparkXHome.git
+fi
+
 cd SparkXHome
 ./install.sh
