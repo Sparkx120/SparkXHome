@@ -2,7 +2,7 @@
 # Installs SparkX120 Symlinked Environment
 
 # Constants
-declare -rA OS_NAME_MAP=(["arch"]="Arch Linux", ["debian"]="Debian Linux")
+declare -rA OS_NAME_MAP=(["arch"]="Arch Linux" ["debian"]="Debian Linux")
 
 # Setup XDG Base Directory Paths
 XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
