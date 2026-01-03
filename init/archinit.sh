@@ -30,7 +30,7 @@ PACKAGES=(
     exfatprogs
     cryptsetup
     sudo
-    snapper
+    openssh
     man-db
     vim
     curl
