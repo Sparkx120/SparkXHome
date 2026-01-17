@@ -26,9 +26,9 @@ draw_ascii_art() {
     local MOTD_USERNAME_FONT=${SPARKX_HOME_MOTD_USERNAME_FONT:-mini}
     local MOTD_WIDTH=$1
     # Draw the ascii art
-    figlet -f $SPARKX_HOME_CLONE_DIR/fonts/figlet/$MOTD_HOST_FONT.flf -w $MOTD_WIDTH -c "$HOSTNAME"
-    figlet -f $SPARKX_HOME_CLONE_DIR/fonts/figlet/$MOTD_WELCOME_FONT.flf -w $MOTD_WIDTH -c "welcome"
-    figlet -f $SPARKX_HOME_CLONE_DIR/fonts/figlet/$MOTD_USERNAME_FONT.flf -w $MOTD_WIDTH -c `echo $MOTD_NAME | sed -e 's/\(.\)/\1 /g'`
+    figlet -f $XDG_DATA_HOME/SparkXHome/figlet/$MOTD_HOST_FONT.flf -w $MOTD_WIDTH -c "$HOSTNAME"
+    figlet -f $XDG_DATA_HOME/SparkXHome/figlet/$MOTD_WELCOME_FONT.flf -w $MOTD_WIDTH -c "welcome"
+    figlet -f $XDG_DATA_HOME/SparkXHome/figlet/$MOTD_USERNAME_FONT.flf -w $MOTD_WIDTH -c `echo $MOTD_NAME | sed -e 's/\(.\)/\1 /g'`
 }
 
 draw_original_art() {
@@ -71,10 +71,10 @@ draw_custom_art() {
     local MOTD_ART=${SPARKX_HOME_MOTD_ART:-$XDG_DATA_HOME/SparkXHome/hostart.txt}
     local MOTD_USE_HOST_ART=${SPARKX_HOME_MOTD_USE_HOST_ART:-false}
     local IMG_WIDTH=`expr $TERM_WIDTH \* 3 / 4 `
-    local ART="$SPARKX_HOME_CLONE_DIR/$ART_FILE"
+    local ART="$ART_FILE"
 
     if [[ "$ART" == *.gif ]]; then
-        convert "$ART[0]" /tmp/art.png
+        magick "$ART[0]" /tmp/art.png
         local ART_LENGTH=`_max_length catimg /tmp/art.png -w $IMG_WIDTH`
         local ART_HEIGHT=`catimg /tmp/art.png -w $IMG_WIDTH | _trim_special | wc -l`
         rm /tmp/art.png

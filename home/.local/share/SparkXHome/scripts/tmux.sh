@@ -1,6 +1,6 @@
 sparkx-tmux-new-session() {
     # Start a new tmux session with motd
-    tmux new-session $XDG_DATA_HOME/sparkxhome/motd.sh $@
+    tmux new-session $XDG_DATA_HOME/SparkXHome/motd.sh $@
 }
 
 sparkx-tmux-reattach() {
